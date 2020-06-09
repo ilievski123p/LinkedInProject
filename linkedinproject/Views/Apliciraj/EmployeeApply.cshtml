@@ -1,0 +1,30 @@
+﻿@model linkedinproject.Models.Apliciraj
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="row">
+    <div class="col-md-4" style="position:relative; margin-top:25%; left:25%;">
+        <form asp-action="EmployeeApply">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="width:500px;">
+                <label asp-for="EmployeeId" class="control-label"><strong>Employee:</strong></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+            </div>
+            <div class="form-group" style="width:500px;">
+                <label asp-for="OglasId" class="control-label"><strong>For Job:</strong></label>
+                <select asp-for="OglasId" class="form-control" asp-items="ViewBag.OglasId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Apply" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="col-md-4" style="position:relative; left:25%;">
+    <a href='javascript:history.go(-1)' >Go Back</a>
+</div>
+

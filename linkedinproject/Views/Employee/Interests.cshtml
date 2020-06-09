@@ -1,0 +1,60 @@
+﻿@model linkedinproject.Models.Employee
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style=" background-image: url('../images/background.jpg'); background-size:cover;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border box-shadow mb-3" style="background-color:white;">
+            <div style="float:left; opacity:1;">
+                <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="https://www.intelligencecareers.gov/images/ichome/searchjobs_icon.png" width="100" height="70" /> </a>
+            </div>
+            <a asp-area="" asp-controller="Employee" asp-action="Interests" asp-route-id="@Model.Id">
+                <button style="position:relative; left:50%; font-size:25px; border:none;background-color:white;">Interests</button>
+            </a>
+            <a asp-area="" asp-controller="Employee" asp-action="Applications" asp-route-id="@Model.Id">
+                <button style="position:relative; left:50%; font-size:25px; border:none;background-color:white;">Your applications</button>
+            </a>
+            <a asp-area="" asp-controller="Employee" asp-action="EmployeeHomePage" asp-route-id="@Model.Id">
+                <button style="right:1%;float:right;position:absolute; font-size:20px; top:23%; font-family:Ebrima; background-color:white; border:none;">
+                    <img src="~/images/@Model.ProfilePicutre"
+                         style="border-radius:50%; width:50px; height:50px;"
+                         asp-append-version="true" />
+                    @Html.DisplayFor(model => model.FullName)
+                </button>
+            </a>
+        </nav>
+    </header>
+
+    @foreach (var item in Model.Interests)
+    {
+        <div class="fontface" style="text-align:center; position:relative; border:solid 1px; font-weight:bold;">
+
+            <a asp-area="" asp-controller="Employer" asp-action="EmployeeSeeProfile" asp-route-id="@item.EmployerId">
+                <img src="~/images/@item.Employer.ProfilePicture"
+                     class="rounded-circle"
+                     height="100" width="100" style="margin-top:0.5%;"
+                     asp-append-version="true" />
+                <strong style="font-size:40px;"> @Html.DisplayFor(modelItem => item.Employer.Name)</strong>
+            </a>
+            <br />
+            @foreach (var oglas in item.Employer.Oglasi)
+            {
+                <hr />
+                <div>
+                    <strong style="font-family:Candara; font-size:30px;">@Html.DisplayFor(modelItem => oglas.JobTitle)</strong>
+                    <br />
+                    @Html.DisplayFor(modelItem => oglas.Description)
+                    <br />
+                </div>
+                <a asp-area="" asp-controller="Apliciraj" asp-action="EmployeeApply" asp-route-id3="@oglas.Id" asp-route-id2="@Model.Id">  Apply Now!</a>
+            }
+        </div>
+    }
+</body>
+</html>

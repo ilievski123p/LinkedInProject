@@ -1,0 +1,76 @@
+﻿@model linkedinproject.Models.Employee
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style=" background-image: url('../images/background.jpg'); background-size:cover;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border box-shadow mb-3" style="background-color:white;">
+            <div style="float:left; opacity:1;">
+                <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="https://www.intelligencecareers.gov/images/ichome/searchjobs_icon.png" width="100" height="70" /> </a>
+            </div>
+        <!--    <a asp-area="" asp-controller="Employee" asp-action="Interests" asp-route-id="Model.Id">
+                <button style="position:relative; left:50%; font-size:25px; border:none;background-color:white;">Interests</button>
+            </a> -->
+            <a asp-area="" asp-controller="Employee" asp-action="EmployeeHomePage" asp-route-id="@Model.Id">
+                <button style="right:1%;float:right;position:absolute; font-size:20px; top:23%; font-family:Ebrima; background-color:white; border:none;">
+                    <img src="~/images/@Model.ProfilePicutre"
+                         style="border-radius:50%; width:50px; height:50px;"
+                         asp-append-version="true" />
+                    @Html.DisplayFor(model => model.FullName)
+                </button>
+            </a>
+        </nav>
+    </header>
+ 
+    <div style="background-color:aliceblue; position:relative; z-index:-5;">
+        <img src="~/images/@Model.CoverPhoto"
+             style="width:100%; height:500px; position:relative; z-index:-1;"
+             asp-append-version="true" />
+        <img src="~/images/@Model.ProfilePicutre"
+             style="width:200px; height:200px; border-radius:50%; position:absolute; z-index:1; left:42%; top:46%; "
+             asp-append-version="true" />
+
+        <br />
+        <div style="position:relative; text-align:center;">
+            <div style="font-size:35px"><strong>@Html.DisplayFor(model => model.FullName)</strong></div>
+            <div>Age: @Html.DisplayFor(model => model.Age)</div>
+            <div>Currently @Html.DisplayFor(model => model.CurrentPosition)</div>
+            <div>Looking for jobs similar to @Html.DisplayFor(model => model.WantedPosition)</div>
+        </div>
+    </div>
+    <br />
+    <div style="background-color:aliceblue; position:relative; text-align:center;">
+        <strong style="font-size:25px;">Contact</strong>
+        <div>CV: <a href="~/files/@Html.DisplayFor( model => model.CV)">@Html.DisplayFor(model => model.CV)</a></div>
+        <div>Cover Letter: <a href="~/files/@Html.DisplayFor(model => model.CoverLetter)">@Html.DisplayFor(model => model.CoverLetter)</a></div>
+        <div>GitHub: <a href="@Html.DisplayFor(model => model.GitHubLink)">@Html.DisplayFor(model => model.GitHubLink)</a></div>
+        <div>Location: @Html.DisplayFor(model => model.Location)</div>
+        <div>Phone Number: @Html.DisplayFor(model => model.PhoneNumber)</div>
+        <div>Mail: @Html.DisplayFor(model => model.Mail)</div>
+    </div>
+    <br />
+    <div style="background-color:aliceblue; position:relative; text-align:center;">
+        <strong style="font-size:25px;">Description</strong> <br />
+        @Html.DisplayFor(model => model.Description)
+        <br />
+    </div>
+    <br />
+    <div style="background-color:aliceblue; position:relative; text-align:center;">
+        <strong style="font-size:25px;">Personal Skills</strong>
+        <br />
+        @Html.DisplayFor(model => model.Skills)
+        <br />
+    </div>
+    <br />
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
