@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using linkedinproject.Data;
 using linkedinproject.Models;
 
 namespace linkedinproject.Controllers
@@ -22,8 +21,18 @@ namespace linkedinproject.Controllers
         // GET: Oglas
         public async Task<IActionResult> Index()
         {
-            var linkedInProjectDataContext = _context.Oglas.Include(o => o.Employee).Include(o => o.Employer);
-            return View(await linkedInProjectDataContext.ToListAsync());
+            var oglas = _context.Oglas.Include(o => o.Employee).Include(o => o.Employer);
+            return View(await oglas.ToListAsync());
+        }
+        public async Task<IActionResult> EmployerJobs(string? name)
+        {
+            
+                string[] employername = name.Split('@');
+                var oglasi = _context.Oglas.Where(o => o.Employer.Name.Contains(employername[0]));
+                return View(await oglasi.ToListAsync());
+            
+               
+            
         }
 
         // GET: Oglas/Details/5
@@ -239,9 +248,9 @@ namespace linkedinproject.Controllers
             }
 
             var oglas = await _context.Oglas
-                .Include(o => o.Employee)
+                .Include(o => o.Employee).Include(o => o.Aplikacii).ThenInclude( e => e.Employee)
                 .Include(o => o.Employer)
-                .Include(o => o.Aplikacii)
+                
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (oglas == null)
             {

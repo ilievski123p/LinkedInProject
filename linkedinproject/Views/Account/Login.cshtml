@@ -1,0 +1,22 @@
+﻿@model linkedinproject.ViewModels.LoginViewModel
+
+<div class="text-danger" asp-validation-summary="All" style="position:relative; top-margin:24%;"></div>
+
+<form asp-action="Login" method="post">
+    <div class="col-md-10" style="position:relative; margin-top:20%;">
+        <input type="hidden" asp-for="ReturnUrl" />
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <div class="form-group">
+                <label for="Password">Лозинка</label>
+                <input asp-for="Password" class="form-control" type="password" data-val="true" />
+            </div>
+            <hr />
+            <button class="btn btn-default" type="submit">Најави се</button>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

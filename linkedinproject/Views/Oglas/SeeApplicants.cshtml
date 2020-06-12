@@ -4,9 +4,9 @@
 <h1>Applicants for @Html.DisplayFor( model => model.JobTitle)</h1>
 @foreach(var item in Model.Aplikacii)
 {
-<div>-
-    <a asp-area="" asp-controller="Employee" asp-action="EmployerSeeProfile" asp-route-id="@item.EmployeeId">
-        @Html.DisplayFor( modelItem => item.Employee.FullName)
+<div style="font-size:x-large;">-
+    <a asp-area="" asp-controller="Employer" asp-action="EmployerSeeProfile" asp-route-id="@item.EmployeeId">
+        @Html.DisplayFor(modelItem => item.Employee.FullName)
     </a>        
 </div>
 }

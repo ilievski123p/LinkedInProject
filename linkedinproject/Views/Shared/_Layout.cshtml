@@ -7,16 +7,130 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body style=" background-image: url('../images/background.jpg'); background-size:cover;">
+<body style=" background-image: url('/images/background.jpg'); background-size:cover; background-color:white;">
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-expand-sm navbar-toggleable-sm  border box-shadow" style="background-color:white;">
+        <div class="container">
+            <div class="navbar-header">
+               
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (User.IsInRole("Admin"))
+                    {<div style="float:left; opacity:1;">
+                            <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
+                        </div>
+                    }
+                    @if (User.IsInRole("Employee"))
+                    {<div style="float:left; opacity:1;">
+                            <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
+                        </div>
+                    }
+                    @if (User.IsInRole("Employer"))
+                    {<div style="float:left; opacity:1;">
+                            <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
+                        </div>
+                        }
+                 }
+                    else
+                    {  <div style="position:absolute; right:20%;  font-size:large; margin-top:0.5%;">
+                       <a asp-area="" asp-controller="Account" asp-action="Login" class="nav navbar-btn right" >Login</a>
+                        </div>
+                     }
+                
+                    &nbsp;
+                <div>
+                    <ul>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                                <a asp-area="" asp-controller="Oglas" asp-action="Index">Jobs</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima;border:none; background-color:transparent;">
+                                <a asp-area="" asp-controller="Apliciraj" asp-action="Index">Applications</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima;border:none; background-color:transparent;">
+                                <a asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent;">
+                                <a asp-area="" asp-controller="Employers" asp-action="Index">Employers</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-60%;">
+                                <a asp-area="" asp-controller="Account" asp-action="UserInfo"> @(User.Identity.Name)</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-60%;">
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </button>
+                        }
+                        @if (User.IsInRole("Employer"))
+                        {
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                                <a asp-area="" asp-controller="Employer" asp-action="EmployerProfile" asp-route-name="@(User.Identity.Name)">Profile</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                                <a asp-area="" asp-controller="Oglas" asp-action="EmployerJobs" asp-route-name="@(User.Identity.Name)">Jobs</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                                <a>Interested in you</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-95%;">
+                                <a asp-area="" asp-controller="Account" asp-action="UserInfo"> @(User.Identity.Name)</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-95%;">
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </button>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+                        }
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                                <a asp-area="" asp-controller="Employee" asp-action="EmployeeProfile" asp-route-name="@(User.Identity.Name)">Profile</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">                                <a asp-area="" asp-controller="Employee" asp-action="Interests" asp-route-id="1">Interests</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                                <a asp-area="" asp-controller="Employee" asp-action="Applications" asp-route-id="1">Applications</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-110%;">
+                                <a asp-area="" asp-controller="Account" asp-action="UserInfo"> @(User.Identity.Name)</a>
+                            </button>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-110%;">
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </button>
+                        }
+
+                    </ul>
+                   
+                </div>
+            </div>
+        </div>
+    </nav>
+    <partial name="_CookieConsentPartial" />
+    <div class="container body-content" style="position:relative; margin-top:5%;">
+        <br />
+        <br />
+        @RenderBody()
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

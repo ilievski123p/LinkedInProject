@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<linkedinproject.Models.Oglas>
 
-@{
-    ViewData["Title"] = "Index";
-}
 
 <h1>Index</h1>
 
@@ -19,9 +16,6 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Employer)
             </th>
             <th></th>
@@ -35,9 +29,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Employer.Name)

@@ -1,0 +1,65 @@
+﻿@model linkedinproject.Models.Employer
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style=" background-image: url('../images/background.jpg'); background-size:cover;">
+
+    <div style="background-color:aliceblue; position:relative;">
+        <img src="~/images/@Model.ProfilePicture"
+             style="position:relative; top:5%; left:43%; border-radius:50%;" width="150" height="150"
+             asp-append-version="true" />
+        </br>
+        <div style="font-size:35px; position:relative; text-align:center;"><strong>@Html.DisplayFor(model => model.Name)</strong></div>
+        <div style="position:relative; text-align:center;">@Html.DisplayFor(model => model.Description)</div>
+        <a asp-action="EditProfile" asp-route-id="@Model.Id" style="position:relative; left:49%;">Edit</a>
+    </div>
+    <br />
+    <div style="background-color:aliceblue; position:relative; text-align:center;">
+        <div style="font-size:35px;"><strong>Contact</strong></div>
+        <div>CEO: @Html.DisplayFor(model => model.CEOName)</div>
+        <div>Location: @Html.DisplayFor(model => model.Location)</div>
+        <div>Phone Number: @Html.DisplayFor(model => model.PhoneNumber)</div>
+        <div>Mail: @Html.DisplayFor(model => model.Mail)</div>
+        <a asp-area="" asp-controller="Employer" asp-action="EditContact" asp-route-id="@Model.Id">Edit</a>
+    </div>
+    <br />
+    <div style="background-color:aliceblue; position:relative; text-align:center;">
+        <div style="font-size:30px;"><strong>Jobs Available</strong></div>
+        <hr />
+        @foreach (var item in Model.Oglasi)
+        {
+            <div>
+                <strong style="font-size:20px;">@Html.DisplayFor(modelItem => item.JobTitle)</strong>
+                <br />
+                <div style="position:relative; left:3%;">
+                    @Html.DisplayFor(modelItem => item.Description)
+
+                    <a asp-area="" asp-controller="Oglas" asp-action="Delete" asp-route-id="@item.Id" style="position:relative; float:right; right:3%;">Delete Ad</a>
+                </div>
+                <a asp-area="" asp-controller="Oglas" asp-action="SeeApplicants" asp-route-id="@item.Id">See Applicants</a>
+            </div>
+            <hr />
+        }
+        <a asp-controller="Oglas" asp-action="MakeOglas" asp-route-id="@Model.Id">New Job</a>
+
+    </div>
+    <br />
+    <div style="background-color:aliceblue; position:relative; text-align:center;">
+        <div style="position:relative; font-size:30px;"><strong>Interested in your company</strong></div>
+        @foreach (var item in Model.Interests)
+        {
+
+            <a asp-area="" asp-controller="Employer" asp-action="EmployerSeeProfile" asp-route-id="@item.Employee.Id"> <i> @Html.DisplayFor(modelItem => item.Employee.FullName)</i> </a>
+            <br />
+        }
+
+    </div>
+</body>
+</html>

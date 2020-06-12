@@ -27,8 +27,7 @@ namespace linkedinproject.Migrations
                     PhoneNumber = table.Column<string>(nullable: true),
                     Mail = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
-                    Skills = table.Column<string>(nullable: true),
-                    OglasId = table.Column<int>(nullable: false)
+                    Skills = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,9 +47,7 @@ namespace linkedinproject.Migrations
                     Location = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     Mail = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    OglasId = table.Column<int>(nullable: false),
-                    InterestId = table.Column<int>(nullable: false)
+                    Password = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,8 +60,8 @@ namespace linkedinproject.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(nullable: false),
-                    EmployerId = table.Column<int>(nullable: false),
+                    EmployeeId = table.Column<int>(nullable: true),
+                    EmployerId = table.Column<int>(nullable: true),
                     InterestId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -75,13 +72,13 @@ namespace linkedinproject.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Interest_Employer_EmployerId",
                         column: x => x.EmployerId,
                         principalTable: "Employer",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,8 +89,9 @@ namespace linkedinproject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     JobTitle = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    EmployeeId = table.Column<int>(nullable: false),
-                    EmployerId = table.Column<int>(nullable: false)
+                    EmployeeId = table.Column<int>(nullable: true),
+                    EmployerId = table.Column<int>(nullable: false),
+                    OglasId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,7 +101,7 @@ namespace linkedinproject.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Oglas_Employer_EmployerId",
                         column: x => x.EmployerId,
@@ -111,6 +109,43 @@ namespace linkedinproject.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Apliciraj",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(nullable: true),
+                    OglasId = table.Column<int>(nullable: true),
+                    AplicirajId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Apliciraj", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Apliciraj_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Apliciraj_Oglas_OglasId",
+                        column: x => x.OglasId,
+                        principalTable: "Oglas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Apliciraj_EmployeeId",
+                table: "Apliciraj",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Apliciraj_OglasId",
+                table: "Apliciraj",
+                column: "OglasId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Interest_EmployeeId",
@@ -135,6 +170,9 @@ namespace linkedinproject.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Apliciraj");
+
             migrationBuilder.DropTable(
                 name: "Interest");
 

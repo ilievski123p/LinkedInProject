@@ -1,32 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using linkedinproject.Data;
 using linkedinproject.Models;
 using linkedinproject.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using System.Net.Mail;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace linkedinproject.Controllers
 {
+    [Authorize(Roles = "Employer")]
     public class EmployerController : Controller
     {
         private readonly LinkedInProjectDataContext _context;
         private readonly LinkedInProjectDataContext dbContext;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly UserManager<AppUser> userManager;
 
-        public EmployerController(LinkedInProjectDataContext context, IWebHostEnvironment hostEnvironment)
+
+        public EmployerController(LinkedInProjectDataContext context, IWebHostEnvironment hostEnvironment, UserManager<AppUser> userMgr)
         {
             _context = context;
-            dbContext = context;
             webHostEnvironment = hostEnvironment;
+            dbContext = context;
+            userManager = userMgr;
         }
-
         // GET: Employer
         public async Task<IActionResult> Index()
         {
@@ -210,7 +211,29 @@ namespace linkedinproject.Controllers
             return View(employer);
         }
 
+        public async Task<IActionResult> EmployerProfile(string? name)
+        {
+            string[] ime = name.Split('@');
+
+            var employer = await _context.Employer.Where(e => e.Name.Contains(ime[0])).Include(e => e.Oglasi).Include(e => e.Interests).ThenInclude(e => e.Employee)
+                .FirstOrDefaultAsync();
+            if (employer == null)
+            {
+                return NotFound();
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (employer.Id != user.EmployerId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(employer);
+        }
+
+
+
+
         //Profil na  Employer koga otvore Employee
+        [AllowAnonymous]
         public async Task<IActionResult> EmployeeSeeProfile(int? id)
         {
             if (id == null)
@@ -377,5 +400,33 @@ namespace linkedinproject.Controllers
         }
 
 
+
+
+
+
+
+
+        //Profil na  Employee koga otvore Employer
+        public async Task<IActionResult> EmployerSeeProfile(int? id)
+        {
+            if (id == null)
+            {
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployerId != null)
+                    return RedirectToAction(nameof(Employee), new { id = curruser.EmployerId });
+                else
+                    return NotFound();
+            }
+
+            var employee = await _context.Employee.Include(e => e.Interests).ThenInclude(e => e.Employer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+           
+            return View(employee);
+        }
     }
 }

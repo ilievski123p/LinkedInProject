@@ -1,13 +1,10 @@
-﻿using linkedinproject.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using linkedinproject.Models;
 
-namespace linkedinproject.Data
+namespace linkedinproject.Models
 {
-    public class LinkedInProjectDataContext : DbContext
+    public class LinkedInProjectDataContext : IdentityDbContext<AppUser>
     {
         public LinkedInProjectDataContext(DbContextOptions<LinkedInProjectDataContext> options) : base(options)
         {
@@ -49,6 +46,7 @@ namespace linkedinproject.Data
                     .HasOne<Oglas>(p => p.Oglas)
                     .WithMany(p => p.Aplikacii)
                     .HasForeignKey(p => p.OglasId);
+            base.OnModelCreating(modelBuilder);
         }
 
     }
