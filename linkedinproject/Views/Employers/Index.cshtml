@@ -1,9 +1,6 @@
 ﻿@model IEnumerable<linkedinproject.Models.Employer>
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -11,19 +8,7 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProfilePicture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CEOName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+               @Html.DisplayName("Profile Picture")
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Mail)
@@ -50,18 +35,6 @@
 
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CEOName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Mail)
                 </td>
                 <td>
@@ -69,8 +42,7 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                   
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
                     <a asp-area="" asp-controller="Admin" asp-action="EmployerProfile"asp-route-employerid="@item.Id">Profile</a>
                 </td>

@@ -31,8 +31,11 @@
                         }
                  }
                     else
-                    {  <div style="position:absolute; right:20%;  font-size:large; margin-top:0.5%;">
+                    {  <div style="float:right; position:relative; right:-900%; margin-top:15%; font-size:larger;">
                        <a asp-area="" asp-controller="Account" asp-action="Login" class="nav navbar-btn right" >Login</a>
+                        </div>
+                        <div style="float:right; position:relative; right:-1020%; margin-top:15%; font-size:larger;">
+                       <a class="nav navbar-btn right" asp-area="" asp-controller="Home" asp-action="Signup" >Sign Up</a>
                         </div>
                      }
                 
@@ -84,7 +87,8 @@
                             <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
                                 <a asp-area="" asp-controller="Employee" asp-action="EmployeeProfile" asp-route-name="@(User.Identity.Name)">Profile</a>
                             </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">                                <a asp-area="" asp-controller="Employee" asp-action="Interests" asp-route-id="1">Interests</a>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">  
+                                <a asp-area="" asp-controller="Employee" asp-action="Interests" asp-route-id="1">Interests</a>
                             </button>
                             <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
                                 <a asp-area="" asp-controller="Employee" asp-action="Applications" asp-route-id="1">Applications</a>

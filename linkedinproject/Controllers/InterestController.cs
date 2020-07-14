@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using linkedinproject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace linkedinproject.Controllers
 {
+    [Authorize(Roles ="Employee, Admin")]
     public class InterestController : Controller
     {
         private readonly LinkedInProjectDataContext _context;

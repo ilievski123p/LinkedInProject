@@ -29,7 +29,7 @@ namespace linkedinproject.Controllers
             userManager = userMgr;
         }
         // GET: Employer
-        public async Task<IActionResult> Index()
+    /*    public async Task<IActionResult> Index()
         {
             return View(await _context.Employer.ToListAsync());
         }
@@ -51,18 +51,17 @@ namespace linkedinproject.Controllers
 
             return View(employer);
         }
-
+    */
         // GET: Employer/Create
+        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employer/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Create(EmployerViewModel model)
         {
             if (ModelState.IsValid)
@@ -87,7 +86,7 @@ namespace linkedinproject.Controllers
             }
             return View();
         }
-
+        /*
         // GET: Employer/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -167,7 +166,7 @@ namespace linkedinproject.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        */
         private bool EmployerExists(int id)
         {
             return _context.Employer.Any(e => e.Id == id);
@@ -198,7 +197,11 @@ namespace linkedinproject.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployerId != null)
+                    return RedirectToAction(nameof(Employer), new { id = curruser.EmployerId });
+                else
+                    return NotFound();
             }
 
             var employer = await _context.Employer.Include(e => e.Oglasi).Include(e => e.Interests).ThenInclude(e => e.Employee)
@@ -207,7 +210,11 @@ namespace linkedinproject.Controllers
             {
                 return NotFound();
             }
-
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployerId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
             return View(employer);
         }
 
@@ -238,7 +245,11 @@ namespace linkedinproject.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployerId != null)
+                    return RedirectToAction(nameof(Employer), new { id = curruser.EmployerId });
+                else
+                    return NotFound();
             }
 
             var employer = await _context.Employer.Include(e => e.Oglasi).Include(e => e.Interests).ThenInclude(e => e.Employee)
@@ -247,7 +258,6 @@ namespace linkedinproject.Controllers
             {
                 return NotFound();
             }
-
             return View(employer);
         }
 
@@ -262,13 +272,21 @@ namespace linkedinproject.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployerId != null)
+                    return RedirectToAction(nameof(Employer), new { id = curruser.EmployerId });
+                else
+                    return NotFound();
             }
-
             var employer = await _context.Employer.FindAsync(id);
             if (employer == null)
             {
                 return NotFound();
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (employer.Id != user.EmployerId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
             }
             return View(employer);
         }
@@ -301,6 +319,11 @@ namespace linkedinproject.Controllers
                 }
                 return RedirectToPage("");
             }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (employer.Id != user.EmployerId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
             return View(employer);
         }
 
@@ -313,7 +336,11 @@ namespace linkedinproject.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployerId != null)
+                    return RedirectToAction(nameof(Employer), new { id = curruser.EmployerId });
+                else
+                    return NotFound();
             }
 
             var model = await _context.Employer.FindAsync(id);
@@ -332,6 +359,11 @@ namespace linkedinproject.Controllers
                 Mail = model.Mail,
                 Password = model.Password,
             };
+            AppUser user = await userManager.GetUserAsync(User);
+            if (vm.Id != user.EmployerId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
             return View(vm);
         }
         [HttpPost]
@@ -379,7 +411,12 @@ namespace linkedinproject.Controllers
                     }
                 }
             }
-            return RedirectToAction("");
+            AppUser user = await userManager.GetUserAsync(User);
+            if (model.Id != user.EmployerId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return RedirectToPage("");
 
         }
         public string UploadedFileProfile(EmployerViewModel model)

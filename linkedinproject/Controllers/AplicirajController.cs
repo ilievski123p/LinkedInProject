@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using linkedinproject.Models;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace linkedinproject.Controllers
 {
+    [Authorize(Roles ="Employee, Admin")]
     public class AplicirajController : Controller
     {
         private readonly LinkedInProjectDataContext _context;
@@ -22,7 +24,7 @@ namespace linkedinproject.Controllers
         // GET: Apliciraj
         public async Task<IActionResult> Index()
         {
-            var linkedInProjectDataContext = _context.Apliciraj.Include(a => a.Employee).Include(a => a.Oglas);
+            var linkedInProjectDataContext = _context.Apliciraj.Include(a => a.Employee).Include(a => a.Oglas).ThenInclude(e => e.Employer);
             return View(await linkedInProjectDataContext.ToListAsync());
         }
 

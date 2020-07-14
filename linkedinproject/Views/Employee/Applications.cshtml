@@ -13,12 +13,14 @@
     @foreach (var item in Model.Aplikacii)
     {
        
-<div class="fontface" style="text-align:center; position:relative; border:solid 1px; font-weight:bold;">
-    <strong style="font-size:40px;"> @Html.DisplayFor(modelItem => item.Oglas.Employer.Name)</strong>
-    <hr />
-      <div style="font-weight:bold; font-size:30px;">@Html.DisplayFor(modelItem => item.Oglas.JobTitle)</div>
-      <div>@Html.DisplayFor(modelItem => item.Oglas.Description)</div>
-</div>
+    <div class="fontface" style="text-align:center; position:relative; border:solid 1px; font-weight:bold;">
+        <a asp-area="" asp-controller="Employee" asp-action="EmployeeSeeProfile" asp-route-id="@item.Oglas.EmployerId">
+            <strong style="font-size:40px;"> @Html.DisplayFor(modelItem => item.Oglas.Employer.Name)</strong>
+            </a>
+            <hr />
+            <div style="font-weight:bold; font-size:30px;">@Html.DisplayFor(modelItem => item.Oglas.JobTitle)</div>
+            <div>@Html.DisplayFor(modelItem => item.Oglas.Description)</div>
+    </div>
         
     }
 

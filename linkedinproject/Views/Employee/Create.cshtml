@@ -1,12 +1,9 @@
 ﻿@model linkedinproject.ViewModels.EmployeeViewModel
 
 
-<h1>Create</h1>
 
-<h4>Employee</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10" style="margin-top:5%; margin-left:5%;">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -27,16 +24,13 @@
 
             <label asp-for="ProfileImage" class="control-label">Profile Picture</label>
             <div class="custom-file">
-                <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
-                <label class="custom-file-label" for="customFile">Choose file</label>
-
+                <input asp-for="ProfileImage" class="form-control" id="customFile">
                 <span asp-validation-for="ProfileImage" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CoverImage" class="control-label">Cover Image</label>
                 <div class="custom-file">
-                    <input asp-for="CoverImage" class="custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input asp-for="CoverImage" class="form-control" id="customFile">
                 </div>
                 <span asp-validation-for="CoverImage" class="text-danger"></span>
             </div>
@@ -45,16 +39,14 @@
             <div class="form-group">
                 <label asp-for="CVFile" class="control-label">CV</label>
                 <div class="custom-file">
-                    <input asp-for="CVFile" class="custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input asp-for="CVFile" class="form-control" id="customFile">
                 </div>
                 <span asp-validation-for="CVFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CoverLetterFile" class="control-label">Cover Letter</label>
                 <div class="custom-file">
-                    <input asp-for="CoverLetterFile" class="custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input asp-for="CoverLetterFile" class="form-control" id="customFile">
                 </div>
                 <span asp-validation-for="CoverLetterFile" class="text-danger"></span>
             </div>
@@ -74,19 +66,21 @@
                 <input asp-for="WantedPosition" class="form-control" />
                 <span asp-validation-for="WantedPosition" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <div hidden>Description</div>
                 <label asp-for="Description" class="control-label" hidden></label>
-                <textarea type="text"  rows="5" asp-for="Description" class="form-group" style="height:200px; width:250px;" hiddden></textarea>
+                <textarea type="text" rows="5" asp-for="Description" class="form-group" style="height:200px; width:250px;" hidden></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <div hidden>Skills</div>
+                <div hidden>Description</div>
                 <label asp-for="Skills" class="control-label" hidden></label>
-                <textarea type="text"  rows="5" asp-for="Skills" class="form-group" style="height:200px; width:250px;" hidden></textarea>
+                <textarea type="text" rows="5" asp-for="Skills" class="form-group" style="height:200px; width:250px;" hidden></textarea>
                 <span asp-validation-for="Skills" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
                 <input asp-for="Location" class="form-control" />
@@ -112,13 +106,14 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+            <div class="form-group">
+                <a asp-controller="Home" asp-action="Index">Back</a>
+            </div>
         </form>
 </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section scripts{
     <script type="text/javascript">

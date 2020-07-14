@@ -58,15 +58,13 @@ namespace linkedinproject.Controllers
 
 
 
-        /*
+        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employee/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeViewModel model)
@@ -98,12 +96,12 @@ namespace linkedinproject.Controllers
                 };
                 dbContext.Add(employee);
                 await dbContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
 
             }
             return View();
         }
-        
+        /*
         // GET: Employee/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -616,7 +614,7 @@ namespace linkedinproject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("");
+                return RedirectToPage("");
 
             }
             AppUser user = await userManager.GetUserAsync(User);
@@ -765,7 +763,7 @@ namespace linkedinproject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("");
+                return RedirectToPage("");
 
             }
             AppUser user = await userManager.GetUserAsync(User);
@@ -827,6 +825,8 @@ namespace linkedinproject.Controllers
 
             var employee = await _context.Employee.Include(e => e.Aplikacii).ThenInclude(e => e.Oglas).ThenInclude( e => e.Employer)
                 .FirstOrDefaultAsync(m => m.Id == id);
+                
+            
             if (employee == null)
             {
                 return NotFound();
@@ -838,7 +838,9 @@ namespace linkedinproject.Controllers
             }
             return View(employee);
         }
+
         //Profil na  Employer koga otvore Employee
+        [AllowAnonymous]
         public async Task<IActionResult> EmployeeSeeProfile(int? id)
         {
             if (id == null)

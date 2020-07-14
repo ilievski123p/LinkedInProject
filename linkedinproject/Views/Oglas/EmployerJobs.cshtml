@@ -1,9 +1,6 @@
 ﻿@model IEnumerable<linkedinproject.Models.Oglas>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table" style="position:relative; margin-top:5%;">
     <thead>
         <tr>
             <th>
@@ -12,9 +9,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employer)
-            </th>
+           
             <th></th>
         </tr>
     </thead>
@@ -28,9 +23,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employer.Name)
-                </td>
+               
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

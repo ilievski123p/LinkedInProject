@@ -1,11 +1,8 @@
 ﻿@model linkedinproject.ViewModels.EmployerViewModel
 
-<h1>Create</h1>
 
-<h4>Employer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row" style="margin-top:5%; margin-left:5%;">
+    <div class="col-md-10">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -14,10 +11,10 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProfileImage" class="control-label"></label>
+                <label asp-for="ProfileImage" class="control-label">Profile Image</label>
                 <div class="custom-file">
-                    <input asp-for="ProfileImage" class="custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input asp-for="ProfileImage" class="form-control" id="customFile">
+
                 </div>
                 <span asp-validation-for="ProfileImage" class="text-danger"></span>
             </div>
@@ -27,7 +24,7 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CEOName" class="control-label"></label>
+                <label asp-for="CEOName" class="control-label">CEO Name</label>
                 <input asp-for="CEOName" class="form-control" />
                 <span asp-validation-for="CEOName" class="text-danger"></span>
             </div>
@@ -37,7 +34,7 @@
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
+                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
@@ -51,16 +48,17 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+
+            <div class="form-group">
+                <a asp-area="" asp-controller="" asp-action="Index">Back</a>
+            </div>
+
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 
