@@ -428,7 +428,7 @@ namespace linkedinproject.Controllers
         }
 
         //Interests View
-        public async Task<IActionResult> Interests(int? id)
+   /*     public async Task<IActionResult> Interests(int? id)
         {
             if (id == null)
             {
@@ -456,7 +456,7 @@ namespace linkedinproject.Controllers
 
 
 
-
+        */
 
 
 
@@ -525,7 +525,7 @@ namespace linkedinproject.Controllers
 
 
 
-        //Edit za contact
+     /*   //Edit za contact
         public async Task<IActionResult> EditContact(int? id)
         {
             if (id == null)
@@ -628,7 +628,7 @@ namespace linkedinproject.Controllers
             }
             return View(employee);
         }
-        //Za CV
+       Za CV
         public string UploadedCVContact(EmployeeViewModelContact model)
         {
             string uniqueFileName = null;
@@ -636,7 +636,7 @@ namespace linkedinproject.Controllers
             if (model.CVFile != null)
             {
                 string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "files");
-                uniqueFileName = /* Guid.NewGuid().ToString() + "_" +*/ Path.GetFileName(model.CVFile.FileName);
+                uniqueFileName =  Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.CVFile.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -644,15 +644,13 @@ namespace linkedinproject.Controllers
                 }
             }
             return uniqueFileName;
-        }
-        //Za Motivaciono Pismo
-        public string UploadedFileCoverLetterContact(EmployeeViewModelContact model)
+        }        public string UploadedFileCoverLetterContact(EmployeeViewModelContact model)
         {
             string uniqueFileName = null;
             if (model.CoverLetterFile != null)
             {
                 string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "files");
-                uniqueFileName = /*Guid.NewGuid().ToString() + "_" +*/ Path.GetFileName(model.CoverLetterFile.FileName);
+                uniqueFileName = /*Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.CoverLetterFile.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -662,7 +660,7 @@ namespace linkedinproject.Controllers
             return uniqueFileName;
         }
 
-
+    */
 
 
 
@@ -674,6 +672,7 @@ namespace linkedinproject.Controllers
 
 
         //Edit za contact
+        //Edit za description
         public async Task<IActionResult> EditProfile(int? id)
         {
             if (id == null)
@@ -685,40 +684,22 @@ namespace linkedinproject.Controllers
                     return NotFound();
             }
 
-
             var employee = await _context.Employee.FindAsync(id);
             if (employee == null)
             {
                 return NotFound();
             }
-            EmployeeViewModelProfile vm = new EmployeeViewModelProfile
-            {
-                Id = employee.Id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Age = employee.Age,
-                GitHubLink = employee.GitHubLink,
-                CurrentPosition = employee.CurrentPosition,
-                WantedPosition = employee.WantedPosition,
-                Description = employee.Description,
-                Location = employee.Location,
-                PhoneNumber = employee.PhoneNumber,
-                Mail = employee.Mail,
-                Password = employee.Password,
-                Skills = employee.Skills,
-                CVFile = employee.CV,
-                CoverLetterFile = employee.CoverLetter,
-            };
             AppUser user = await userManager.GetUserAsync(User);
             if (id != user.EmployeeId)
             {
                 return RedirectToAction("AccessDenied", "Account", null);
             }
-            return View(vm);
+            return View(employee);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(int id, EmployeeViewModelProfile employee)
+        public async Task<IActionResult> EditProfile(int id, [Bind("Id,FirstName,LastName,Age,ProfilePicutre,CoverPhoto,CV,CoverLetter,GitHubLink,CurrentPosition,WantedPosition,Description,Location,PhoneNumber,Mail,Password,Skills")] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -729,31 +710,7 @@ namespace linkedinproject.Controllers
             {
                 try
                 {
-                    string FileNameProfile = UploadedFileProfile(employee);
-                    string uniqueFileCoverProfile = UploadedFileCoverProfile(employee);
-                    Employee vm = new Employee
-                    {
-                        Id = employee.Id,
-                        FirstName = employee.FirstName,
-                        LastName = employee.LastName,
-                        Age = employee.Age,
-                        GitHubLink = employee.GitHubLink,
-                        CurrentPosition = employee.CurrentPosition,
-                        WantedPosition = employee.WantedPosition,
-                        Description = employee.Description,
-                        Location = employee.Location,
-                        PhoneNumber = employee.PhoneNumber,
-                        Mail = employee.Mail,
-                        Password = employee.Password,
-                        Skills = employee.Skills,
-                        ProfilePicutre = FileNameProfile,
-                        CoverPhoto = uniqueFileCoverProfile,
-                        CV = employee.CVFile,
-                        CoverLetter = employee.CoverLetterFile,
-
-
-                    };
-                    _context.Update(vm);
+                    _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -767,8 +724,7 @@ namespace linkedinproject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("");
-
+                return RedirectToPage("");
             }
             AppUser user = await userManager.GetUserAsync(User);
             if (id != user.EmployeeId)
@@ -778,41 +734,41 @@ namespace linkedinproject.Controllers
             return View(employee);
         }
         //Za porfilna
-        public string UploadedFileProfile(EmployeeViewModelProfile model)
-        {
-            string uniqueFileName = null;
-
-            if (model.ProfileImage != null)
+        /*    public string UploadedFileProfile(EmployeeViewModelProfile model)
             {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.ProfileImage.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
+                string uniqueFileName = null;
 
-        //Za Cover photo
-        public string UploadedFileCoverProfile(EmployeeViewModelProfile model)
-        {
-            string uniqueFileName = null;
-            if (model.CoverImage != null)
+                if (model.ProfileImage != null)
+                {
+                    string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.ProfileImage.CopyTo(fileStream);
+                    }
+                }
+                return uniqueFileName;
+            }
+
+            //Za Cover photo
+            public string UploadedFileCoverProfile(EmployeeViewModelProfile model)
             {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.CoverImage.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                string uniqueFileName = null;
+                if (model.CoverImage != null)
                 {
-                    model.CoverImage.CopyTo(fileStream);
+                    string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.CoverImage.FileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.CoverImage.CopyTo(fileStream);
+                    }
                 }
+                return uniqueFileName;
             }
-            return uniqueFileName;
-        }
 
-
+            */
 
         //Za gledanje na site aplikacii
 

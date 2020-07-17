@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace linkedinproject.Controllers
 {
-    [Authorize(Roles ="Employee, Admin")]
+    [Authorize(Roles ="Employee, Admin, Employer")]
     public class AplicirajController : Controller
     {
         private readonly LinkedInProjectDataContext _context;
@@ -170,7 +170,6 @@ namespace linkedinproject.Controllers
 
 
         //Za apliciranje na oglasi
-       
         public IActionResult EmployeeApply(int id3,int id2)
         {
             

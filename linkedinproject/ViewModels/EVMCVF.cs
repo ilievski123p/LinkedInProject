@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace linkedinproject.ViewModels
 {
-    public class EmployeeViewModelContact
+    public class EVMCVF
     {
         [Key]
         public int Id { get; set; }
@@ -40,7 +40,7 @@ namespace linkedinproject.ViewModels
         public string ProfileImage { get; set; }
         public string CoverImage { get; set; }
         public string CVFile { get; set; }
-        public string CoverLetterFile { get; set; }
+        public IFormFile CoverLetterFile { get; set; }
 
 
         [ForeignKey("OglasId")]

@@ -37,8 +37,8 @@ namespace linkedinproject.ViewModels
             }
         }
 
-        public IFormFile ProfileImage { get; set; }
-        public IFormFile CoverImage { get; set; }
+        public string ProfileImage { get; set; }
+        public string CoverImage { get; set; }
         public string CVFile { get; set; }
         public string CoverLetterFile { get; set; }
 

@@ -1,7 +1,7 @@
-﻿@model linkedinproject.ViewModels.EmployeeViewModelContact
+﻿@model linkedinproject.ViewModels.EVMCV
 <div style="position:relative; left:20%; margin-top:10%; width:225%; text-align:center; font-size:20px;">
     <div class="col-md-4">
-        <form asp-action="EditContact" method="post" enctype="multipart/form-data">
+        <form asp-action="EditCV" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -32,15 +32,16 @@
 
 
             <div class="form-group">
-                <label asp-for="CVFile" class="control-label" hidden><strong>CV:</strong></label>
+                <label asp-for="CVFile" class="control-label"><strong>CV:</strong></label>
                 <div class="custom-file">
-                    <input asp-for="CVFile" class="form-control" id="customFile" hidden type="hidden">
+                    <input asp-for="CVFile" class="form-control" id="customFile">
                 </div>
                 <span asp-validation-for="CVFile" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="CoverLetterFile" class="control-label" hidden><strong>Cover Letter:</strong></label>
-                <div class="custom-file">
+                <label asp-for="CoverLetterFile" class="control-label" hidden></label>
+                <div class="custom-file " hidden >
                     <input asp-for="CoverLetterFile" class="form-control" id="customFile" type="hidden">
                 </div>
                 <span asp-validation-for="CoverLetterFile" class="text-danger"></span>
@@ -48,9 +49,9 @@
 
 
 
-            <div class="form-group">
-                <label asp-for="GitHubLink" class="control-label"><strong>Link form GitHub</strong></label>
-                <input asp-for="GitHubLink" class="form-control" />
+            <div class="form-group" hidden>
+                <label asp-for="GitHubLink" class="control-labe"l hidden><strong>Link form GitHub</strong></label>
+                <input asp-for="GitHubLink" class="form-control" hidden />
                 <span asp-validation-for="GitHubLink" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -70,24 +71,24 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"><strong>Location</strong></label>
-                <input asp-for="Location" class="form-control" />
+            <div class="form-group" hidden>
+                <label asp-for="Location" class="control-label" hidden><strong>Location</strong></label>
+                <input asp-for="Location" class="form-control" hidden />
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"><strong>Phone Number</strong></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+            <div class="form-group" hidden>
+                <label asp-for="PhoneNumber" class="control-label" hidden><strong>Phone Number</strong></label>
+                <input asp-for="PhoneNumber" class="form-control" hidden />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Mail" class="control-label"> <strong>Mail</strong></label>
-                <input asp-for="Mail" class="form-control" />
+            <div class="form-group" hidden>
+                <label asp-for="Mail" class="control-label" hidden> <strong>Mail</strong></label>
+                <input asp-for="Mail" class="form-control" hidden/>
                 <span asp-validation-for="Mail" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+            <div class="form-group" hidden>
+                <label asp-for="Password" class="control-label" hidden></label>
+                <input asp-for="Password" class="form-control" hidden />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">

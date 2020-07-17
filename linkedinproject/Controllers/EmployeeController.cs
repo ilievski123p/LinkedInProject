@@ -296,7 +296,7 @@ namespace linkedinproject.Controllers
                     return NotFound();
             }
 
-            var employee = await _context.Employee.Include(e => e.Interests).ThenInclude(e =>e.Employer)
+            var employee = await _context.Employee.Include(e=>e.Aplikacii).Include(e => e.Interests).ThenInclude(e =>e.Employer).ThenInclude(e => e.Oglasi)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -316,7 +316,7 @@ namespace linkedinproject.Controllers
         {
             string[] ime = name.Split('@');
 
-            var employee = await _context.Employee.Where(e => e.FirstName.Contains(ime[0])).Include(e => e.Interests).ThenInclude(e => e.Employer)
+            var employee = await _context.Employee.Where(e => e.FirstName.Contains(ime[0])).Include(e => e.Aplikacii).Include(e => e.Interests).ThenInclude(e => e.Employer).ThenInclude(e => e.Oglasi)
                 .FirstOrDefaultAsync();
             if (employee == null)
             {
@@ -557,6 +557,8 @@ namespace linkedinproject.Controllers
                 Skills = employee.Skills,
                 ProfileImage = employee.ProfilePicutre,
                 CoverImage = employee.CoverPhoto,
+                CVFile = employee.CV,
+                CoverLetterFile = employee.CoverLetter,
             };
             AppUser user = await userManager.GetUserAsync(User);
             if (id != user.EmployeeId)
@@ -578,8 +580,7 @@ namespace linkedinproject.Controllers
             {
                 try
                 {
-                    string FileNameCV = UploadedCVContact(employee);
-                    string uniqueFileCoverLetter = UploadedFileCoverLetterContact(employee);
+                   
                     Employee vm = new Employee
                     {
                         Id = employee.Id,
@@ -597,8 +598,8 @@ namespace linkedinproject.Controllers
                         Skills = employee.Skills,
                         ProfilePicutre = employee.ProfileImage,
                         CoverPhoto = employee.CoverImage,
-                        CV = FileNameCV,
-                        CoverLetter = uniqueFileCoverLetter,
+                        CV = employee.CVFile,
+                        CoverLetter = employee.CoverLetterFile,
                     };
                     _context.Update(vm);
                     await _context.SaveChangesAsync();
@@ -624,53 +625,9 @@ namespace linkedinproject.Controllers
             } 
             return View(employee);
         }
-        //Za CV
-        public string UploadedCVContact(EmployeeViewModelContact model)
-        {
-            string uniqueFileName = null;
-
-            if (model.CVFile != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "files");
-                uniqueFileName = /* Guid.NewGuid().ToString() + "_" +*/ Path.GetFileName(model.CVFile.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.CVFile.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
-        //Za Motivaciono Pismo
-        public string UploadedFileCoverLetterContact(EmployeeViewModelContact model)
-        {
-            string uniqueFileName = null;
-            if (model.CoverLetterFile != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "files");
-                uniqueFileName = /*Guid.NewGuid().ToString() + "_" +*/ Path.GetFileName(model.CoverLetterFile.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.CoverLetterFile.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        //Edit za contact
-        public async Task<IActionResult> EditProfile(int? id)
+ 
+        //Za Cover photo
+        public async Task<IActionResult> EditCoverPicture(int? id)
         {
             if (id == null)
             {
@@ -687,7 +644,7 @@ namespace linkedinproject.Controllers
             {
                 return NotFound();
             }
-            EmployeeViewModelProfile vm = new EmployeeViewModelProfile
+            EVMCoverPicture vm = new EVMCoverPicture
             {
                 Id = employee.Id,
                 FirstName = employee.FirstName,
@@ -704,6 +661,7 @@ namespace linkedinproject.Controllers
                 Skills = employee.Skills,
                 CVFile = employee.CV,
                 CoverLetterFile = employee.CoverLetter,
+                ProfileImage = employee.ProfilePicutre,
             };
             AppUser user = await userManager.GetUserAsync(User);
             if (id != user.EmployeeId)
@@ -714,19 +672,18 @@ namespace linkedinproject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(int id, EmployeeViewModelProfile employee)
+        public async Task<IActionResult> EditCoverPicture(int id, EVMCoverPicture employee)
         {
             if (id != employee.Id)
             {
                 return NotFound();
             }
-
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string FileNameProfile = UploadedFileProfile(employee);
-                    string uniqueFileCoverProfile = UploadedFileCoverProfile(employee);
+                    string FileNameProfile = UploadCP(employee);
                     Employee vm = new Employee
                     {
                         Id = employee.Id,
@@ -742,10 +699,11 @@ namespace linkedinproject.Controllers
                         Mail = employee.Mail,
                         Password = employee.Password,
                         Skills = employee.Skills,
-                        ProfilePicutre = FileNameProfile,
-                        CoverPhoto = uniqueFileCoverProfile,
+                        ProfilePicutre = employee.ProfileImage,
                         CV = employee.CVFile,
                         CoverLetter = employee.CoverLetterFile,
+                        CoverPhoto= FileNameProfile,
+                       
 
 
                     };
@@ -773,26 +731,12 @@ namespace linkedinproject.Controllers
             }
             return View(employee);
         }
-        //Za porfilna
-        public string UploadedFileProfile(EmployeeViewModelProfile model)
-        {
-            string uniqueFileName = null;
 
-            if (model.ProfileImage != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.ProfileImage.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
 
-        //Za Cover photo
-        public string UploadedFileCoverProfile(EmployeeViewModelProfile model)
+
+
+
+        public string UploadCP(EVMCoverPicture model)
         {
             string uniqueFileName = null;
             if (model.CoverImage != null)
@@ -807,6 +751,84 @@ namespace linkedinproject.Controllers
             }
             return uniqueFileName;
         }
+
+
+
+
+
+
+
+        //Edit za description
+        public async Task<IActionResult> EditProfile(int? id)
+        {
+            if (id == null)
+            {
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployeeId != null)
+                    return RedirectToAction(nameof(Employee), new { id = curruser.EmployeeId });
+                else
+                    return NotFound();
+            }
+
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(employee);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(int id, [Bind("Id,FirstName,LastName,Age,ProfilePicutre,CoverPhoto,CV,CoverLetter,GitHubLink,CurrentPosition,WantedPosition,Description,Location,PhoneNumber,Mail,Password,Skills")] Employee employee)
+        {
+            if (id != employee.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(employee);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EmployeeExists(employee.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToPage("");
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(employee);
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -857,6 +879,393 @@ namespace linkedinproject.Controllers
 
             return View(employer);
         }
+
+
+
+
+
+
+        //Profile Picture
+        public async Task<IActionResult> EditProfilePicture(int? id)
+        {
+            if (id == null)
+            {
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployeeId != null)
+                    return RedirectToAction(nameof(Employee), new { id = curruser.EmployeeId });
+                else
+                    return NotFound();
+            }
+
+
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            EMVProfilePicture vm = new EMVProfilePicture
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Age = employee.Age,
+                GitHubLink = employee.GitHubLink,
+                CurrentPosition = employee.CurrentPosition,
+                WantedPosition = employee.WantedPosition,
+                Description = employee.Description,
+                Location = employee.Location,
+                PhoneNumber = employee.PhoneNumber,
+                Mail = employee.Mail,
+                Password = employee.Password,
+                Skills = employee.Skills,
+                CVFile = employee.CV,
+                CoverLetterFile = employee.CoverLetter,
+                CoverImage = employee.CoverPhoto,
+            };
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfilePicture(int id, EMVProfilePicture employee)
+        {
+            if (id != employee.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string FileNameProfile = UploadedPP(employee);
+                    Employee vm = new Employee
+                    {
+                        Id = employee.Id,
+                        FirstName = employee.FirstName,
+                        LastName = employee.LastName,
+                        Age = employee.Age,
+                        GitHubLink = employee.GitHubLink,
+                        CurrentPosition = employee.CurrentPosition,
+                        WantedPosition = employee.WantedPosition,
+                        Description = employee.Description,
+                        Location = employee.Location,
+                        PhoneNumber = employee.PhoneNumber,
+                        Mail = employee.Mail,
+                        Password = employee.Password,
+                        Skills = employee.Skills,
+                        ProfilePicutre = FileNameProfile,
+                        CoverPhoto = employee.CoverImage,
+                        CV = employee.CVFile,
+                        CoverLetter = employee.CoverLetterFile,
+
+
+                    };
+                    _context.Update(vm);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EmployeeExists(employee.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToPage("");
+
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(employee);
+        }
+        //Za porfilna
+        public string UploadedPP(EMVProfilePicture model)
+        {
+            string uniqueFileName = null;
+
+            if (model.ProfileImage != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfileImage.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ProfileImage.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+
+
+
+
+
+
+
+
+
+        //CV
+
+        public async Task<IActionResult> EditCV(int? id)
+        {
+            if (id == null)
+            {
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployeeId != null)
+                    return RedirectToAction(nameof(Employee), new { id = curruser.EmployeeId });
+                else
+                    return NotFound();
+            }
+
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            EVMCV vm = new EVMCV
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Age = employee.Age,
+                GitHubLink = employee.GitHubLink,
+                CurrentPosition = employee.CurrentPosition,
+                WantedPosition = employee.WantedPosition,
+                Description = employee.Description,
+                Location = employee.Location,
+                PhoneNumber = employee.PhoneNumber,
+                Mail = employee.Mail,
+                Password = employee.Password,
+                Skills = employee.Skills,
+                ProfileImage = employee.ProfilePicutre,
+                CoverImage = employee.CoverPhoto,
+                CoverLetterFile = employee.CoverLetter,
+            };
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditCV(int id, EVMCV employee)
+        {
+            if (id != employee.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string FileNameCV = UploadCV(employee);
+                    Employee vm = new Employee
+                    {
+                        Id = employee.Id,
+                        FirstName = employee.FirstName,
+                        LastName = employee.LastName,
+                        Age = employee.Age,
+                        GitHubLink = employee.GitHubLink,
+                        CurrentPosition = employee.CurrentPosition,
+                        WantedPosition = employee.WantedPosition,
+                        Description = employee.Description,
+                        Location = employee.Location,
+                        PhoneNumber = employee.PhoneNumber,
+                        Mail = employee.Mail,
+                        Password = employee.Password,
+                        Skills = employee.Skills,
+                        ProfilePicutre = employee.ProfileImage,
+                        CoverPhoto = employee.CoverImage,
+                        CV = FileNameCV,
+                        CoverLetter = employee.CoverLetterFile,
+                    };
+                    _context.Update(vm);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EmployeeExists(employee.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToPage("");
+
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(employee);
+        }
+        //Za CV
+        public string UploadCV(EVMCV model)
+        {
+            string uniqueFileName = null;
+
+            if (model.CVFile != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "files");
+                uniqueFileName = /* Guid.NewGuid().ToString() + "_" +*/ Path.GetFileName(model.CVFile.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.CVFile.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+
+
+
+
+
+
+
+        //Cover Letter
+
+        public async Task<IActionResult> EditCoverL(int? id)
+        {
+            if (id == null)
+            {
+                AppUser curruser = await userManager.GetUserAsync(User);
+                if (curruser.EmployeeId != null)
+                    return RedirectToAction(nameof(Employee), new { id = curruser.EmployeeId });
+                else
+                    return NotFound();
+            }
+
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            EVMCVF vm = new EVMCVF
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Age = employee.Age,
+                GitHubLink = employee.GitHubLink,
+                CurrentPosition = employee.CurrentPosition,
+                WantedPosition = employee.WantedPosition,
+                Description = employee.Description,
+                Location = employee.Location,
+                PhoneNumber = employee.PhoneNumber,
+                Mail = employee.Mail,
+                Password = employee.Password,
+                Skills = employee.Skills,
+                ProfileImage = employee.ProfilePicutre,
+                CoverImage = employee.CoverPhoto,
+                CVFile = employee.CV,
+            };
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditCoverL(int id, EVMCVF employee)
+        {
+            if (id != employee.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string FileNameCV = UploadCLF(employee);
+                    Employee vm = new Employee
+                    {
+                        Id = employee.Id,
+                        FirstName = employee.FirstName,
+                        LastName = employee.LastName,
+                        Age = employee.Age,
+                        GitHubLink = employee.GitHubLink,
+                        CurrentPosition = employee.CurrentPosition,
+                        WantedPosition = employee.WantedPosition,
+                        Description = employee.Description,
+                        Location = employee.Location,
+                        PhoneNumber = employee.PhoneNumber,
+                        Mail = employee.Mail,
+                        Password = employee.Password,
+                        Skills = employee.Skills,
+                        ProfilePicutre = employee.ProfileImage,
+                        CoverPhoto = employee.CoverImage,
+                        CoverLetter = FileNameCV,
+                        CV = employee.CVFile,
+                    };
+                    _context.Update(vm);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EmployeeExists(employee.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToPage("");
+
+            }
+            AppUser user = await userManager.GetUserAsync(User);
+            if (id != user.EmployeeId)
+            {
+                return RedirectToAction("AccessDenied", "Account", null);
+            }
+            return View(employee);
+        }
+        //Za CV
+        public string UploadCLF(EVMCVF model)
+        {
+            string uniqueFileName = null;
+
+            if (model.CVFile != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "files");
+                uniqueFileName = /* Guid.NewGuid().ToString() + "_" +*/ Path.GetFileName(model.CoverLetterFile.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.CoverLetterFile.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+
+
+
+
+
+
 
     }
 }

@@ -21,13 +21,13 @@
                     }
                     @if (User.IsInRole("Employee"))
                     {<div style="float:left; opacity:1;">
-                            <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
+                            <a asp-area="" asp-controller="Employee" asp-action="EmployeeProfile" asp-route-name="@(User.Identity.Name)"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
                         </div>
                     }
                     @if (User.IsInRole("Employer"))
                     {<div style="float:left; opacity:1;">
-                            <a asp-area="" asp-controller="Home" asp-action="Index"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
-                        </div>
+                     <a asp-area="" asp-controller="Employer" asp-action="EmployerProfile" asp-route-name="@(User.Identity.Name)"> <img src="/images/searchjobs_icon.png" width="100" height="70" /> </a>
+                    </div>
                         }
                  }
                     else
@@ -59,45 +59,35 @@
                             <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-60%;">
                                 <a asp-area="" asp-controller="Account" asp-action="UserInfo"> @(User.Identity.Name)</a>
                             </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-60%;">
-                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; position:relative; float:right; right:-60%;" class="btn btn-primary"> 
+                                <a asp-area="" asp-controller="Account" asp-action="Logout" style="color:white;">Logout</a>
                             </button>
                         }
                         @if (User.IsInRole("Employer"))
                         {
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
-                                <a asp-area="" asp-controller="Employer" asp-action="EmployerProfile" asp-route-name="@(User.Identity.Name)">Profile</a>
-                            </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
+                            
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none; left:10%; position:relative;" >
                                 <a asp-area="" asp-controller="Oglas" asp-action="EmployerJobs" asp-route-name="@(User.Identity.Name)">Jobs</a>
                             </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
-                                <a>Interested in you</a>
-                            </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-95%;">
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-215%;">
                                 <a asp-area="" asp-controller="Account" asp-action="UserInfo"> @(User.Identity.Name)</a>
                             </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-95%;">
-                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; position:relative; float:right; right:-215%; color:white;" class=" btn btn-primary">
+                                <a asp-area="" asp-controller="Account" asp-action="Logout" style="color:white;">Logout</a>
                             </button>
 
                         }
+                      
                         @if (User.IsInRole("Employee"))
                         {
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
-                                <a asp-area="" asp-controller="Employee" asp-action="EmployeeProfile" asp-route-name="@(User.Identity.Name)">Profile</a>
-                            </button>
                             <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">  
-                                <a asp-area="" asp-controller="Employee" asp-action="Interests" asp-route-id="1">Interests</a>
+                                <a asp-area="" asp-controller="Interest" asp-action="EmployeeInterest" asp-route-name="@User.Identity.Name">Interests</a>
                             </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; background-color:transparent; border:none;">
-                                <a asp-area="" asp-controller="Employee" asp-action="Applications" asp-route-id="1">Applications</a>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-200%;">
+                                <a asp-area="" asp-controller="Account" asp-action="UserInfo">@(User.Identity.Name)</a>
                             </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-110%;">
-                                <a asp-area="" asp-controller="Account" asp-action="UserInfo"> @(User.Identity.Name)</a>
-                            </button>
-                            <button style="font-size:20px; top:23%; font-family:Ebrima; border:none; background-color:transparent; position:relative; float:right; right:-110%;">
-                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <button style="font-size:20px; top:23%; font-family:Ebrima; position:relative; float:right; right:-200%;" class="btn btn-primary">
+                                <a asp-area="" asp-controller="Account" asp-action="Logout" style="color:white">Logout</a>
                             </button>
                         }
 

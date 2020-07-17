@@ -8,6 +8,7 @@ using linkedinproject.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace linkedinproject
 {
@@ -37,6 +38,8 @@ namespace linkedinproject
             services.AddDbContext<LinkedInProjectDataContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("LinkedInProjectContext")));
             services.AddMvc();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -49,7 +52,7 @@ namespace linkedinproject
                 options.Password.RequiredUniqueChars = 1; 
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 

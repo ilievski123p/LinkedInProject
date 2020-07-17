@@ -46,6 +46,7 @@ namespace linkedinproject.Models
                     .HasOne<Oglas>(p => p.Oglas)
                     .WithMany(p => p.Aplikacii)
                     .HasForeignKey(p => p.OglasId);
+
             base.OnModelCreating(modelBuilder);
         }
 

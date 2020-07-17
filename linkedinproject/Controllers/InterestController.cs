@@ -178,7 +178,7 @@ namespace linkedinproject.Controllers
         //Make interest 
 
 
-        public IActionResult MakeInterest([FromRoute]int? id)
+        public IActionResult MakeInterest([FromRoute] int? id)
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee.Where(e => e.Id == id), "Id", "FullName");
             ViewData["EmployerId"] = new SelectList(_context.Employer, "Id", "Name");
@@ -186,21 +186,38 @@ namespace linkedinproject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> MakeInterest([FromRoute]int id, [Bind("Id,EmployerId")] Interest interesty)
+        public async Task<IActionResult> MakeInterest([FromRoute] int id, [Bind("Id,EmployerId")] Interest interesty)
         {
-            
-                var employee = await _context.Employee.FirstOrDefaultAsync(m => m.Id == id);
+
+            var employee = await _context.Employee.FirstOrDefaultAsync(m => m.Id == id);
             Interest interest = new Interest
             {
                 EmployerId = interesty.EmployerId,
                 EmployeeId = employee.Id,
 
             };
-                _context.Add(interest);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("EmployeeHomePage", "Employee", new { id = interest.EmployeeId });
-            
+            _context.Add(interest);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("EmployeeHomePage", "Employee", new { id = interest.EmployeeId });
+
         }
+
+
+
+        public async Task<IActionResult> EmployeeInterest(string? name)
+        {
+            string[] ime = name.Split('@');
+            var employee = await _context.Employee.Where(e => e.FirstName.Contains(ime[0])).Include(e => e.Oglasi).
+                Include(e => e.Interests).ThenInclude(e => e.Employer).ThenInclude(e => e.Oglasi)
+                .FirstOrDefaultAsync();
+            if (employee == null)
+            {
+                return NotFound();
+            }
+           
+            return View(employee);
+        }
+
 
 
 

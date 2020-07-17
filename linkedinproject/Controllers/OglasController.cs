@@ -131,7 +131,7 @@ namespace linkedinproject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToPage("");
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "FullName", oglas.EmployeeId);
             ViewData["EmployerId"] = new SelectList(_context.Employer, "Id", "Name", oglas.EmployerId);

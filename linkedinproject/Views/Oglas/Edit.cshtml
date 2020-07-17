@@ -1,9 +1,5 @@
 ﻿@model linkedinproject.Models.Oglas
 
-<h1>Edit</h1>
-
-<h4>Oglas</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -19,14 +15,14 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+            <div class="form-group" hidden>
+                <label asp-for="EmployeeId" class="control-label" hidden></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId" hidden></select>
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmployerId" class="control-label"></label>
-                <select asp-for="EmployerId" class="form-control" asp-items="ViewBag.EmployerId"></select>
+            <div class="form-group" hidden>
+                <label asp-for="EmployerId" class="control-label" hidden></label>
+                <select asp-for="EmployerId" class="form-control" asp-items="ViewBag.EmployerId" hidden></select>
                 <span asp-validation-for="EmployerId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,10 +30,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
